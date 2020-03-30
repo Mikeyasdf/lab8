@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Geography Quiz</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script>
+        $(document).ready(function(){
+            var score = 0;
+            var attempts = localStorage.getItem("totalAttempts");
+            $("button").on("click", gradeQuiz);
+            
+            $(".q5Choice").on("click", function(){
+                $(".q5Choice").css("background", "");
+                $(this).css("background", "rgb(255, 255, 0)");
+            });
+            
+            displayQ4Choices();
+            
+            function displayQ4Choices(){
+                let q4ChoicesArray = ["Maine", "Rhode Island", "Maryland", "Delaware"];
+                q4ChoicesArray = _.shuffle(q4ChoicesArray);
+            }
+            function isFormValid(){
+                let isValid = true;
+                if($("#q1").val() == ""){
+                    isValid = false;
+                    $("#validationFdbk").html("Question 1 was not answered");
+                }
+                return isValid;
+            }
+            function isFormValid2(){
+                let isValid = true;
+                if($("#q6").val() == ""){
+                    isValid = false;
+                    $("#validationFdbk").html("Question 6 was not answered");
+                }
+                return isValid;
+            }
+            function gradeQuiz(){
+                $("#validationFdbk").html("");
+                if(!isFormValid()){
+                    return;
+                }
+                $("#validationFdbk").html("");
+                if(!isFormValid2()){
+                    return;
+                }
+                
+                score = 0;
+                let q1Response = $("#q1").val().toLowerCase();
+                let q2Response = $("#q2").val();
+                let q4Response = $("input[name=q4]:checked").val();
+                let q6Response = $("#q6").val().toLowerCase();
+                let q7Response = $("#q7").val();
+                //Question 1
+                if(q1Response == "sacramento"){
+                    rightAnswer(1);
+                }else{
+                    wrongAnswer(1);
+                }
+                //Question 2
+                if(q2Response == "mo"){
+                    rightAnswer(2);
+                }else{
+                    wrongAnswer(2);
+                }
+                //Question 3
+                if($("#Jefferson").is(":checked") && $("#Roosevelt").is(":checked")
+                    && !$("#Jackson").is(":checked") && !$("#Franklin").is(":checked")){
+                    rightAnswer(3);
+                }else{
+                    wrongAnswer(3);
+                }
+                //Question 4
+                if(q4Response == "Rhode Island"){
+                    rightAnswer(4);
+                }else{
+                    wrongAnswer(4);
+                }
+                //Question 5
+                if($("#seal2").css("background-color") == "rgb(255, 255, 0)"){
+                    rightAnswer(5);
+                }else{
+                    wrongAnswer(5);
+                }
+                //Question 6
+                if(q6Response == "lake superior"){
+                    rightAnswer2(6);
+                }else{
+                    wrongAnswer(6);
+                }
+                //Question 7
+                if(q7Response == "Albany"){
+                    rightAnswer2(7);
+                }else{
+                    wrongAnswer(7);
+                }
+                //Question 8
+                if($("#Alaska").is(":checked") && $("#Florida").is(":checked")
+                    && !$("#California").is(":checked") && !$("#Texas").is(":checked")){
+                    rightAnswer2(8);
+                }else{
+                    wrongAnswer(8);
+                }
+                if(score < 80){
+                    $("#validationFdb").html("");
+                    $("#congratulations").html("");
+                    $("#validationFdbk").html("Total Score: " + score);
+                }else{
+                    $("#validationFdb").html("Total Score: " + score);
+                    $("#congratulations").html("Great kid! Don't get cocky!");
+                }
+                $("#totalAttempts").html(`Total Attempts: ${++attempts}`);
+                localStorage.setItem("totalAttempts", attempts);
+            }
+            function rightAnswer(index){
+                $(`#q${index}Feedback`).html("Correct!");
+                $(`#q${index}Feedback`).attr("class", "bg-success text-white");
+                $(`#markImg${index}`).html("<img src='img/checkmark.png'>");
+                score += 20;
+            }
+            function rightAnswer2(index){
+                $(`#q${index}Feedback`).html("Correct!");
+                $(`#q${index}Feedback`).attr("class", "bg-success text-white");
+                $(`#markImg${index}`).html("<img src='img/checkmark.png'>");
+                score += 12.50;
+            }
+            function wrongAnswer(index){
+                $(`#q${index}Feedback`).html("Incorrectt!");
+                $(`#q${index}Feedback`).attr("class", "bg-warning text-white");
+                $(`#markImg${index}`).html("<img src='img/xmark.png' alt='xmark'>");
+            }
+        });
+	</script>
+</head>
+<body class='text-center'>
